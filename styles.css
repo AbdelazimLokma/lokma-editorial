@@ -375,7 +375,6 @@ nav a[aria-current="page"] span {
 
 .companies-sheet {
   position: relative;
-  margin: 0;
   overflow: hidden;
   background: var(--wash);
   border-left: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
@@ -388,18 +387,6 @@ nav a[aria-current="page"] span {
   height: 100%;
   object-fit: cover;
   object-position: center;
-}
-
-.sheet-caption {
-  position: absolute;
-  left: 24px;
-  bottom: 22px;
-  margin: 0;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--graphite);
 }
 
 /* 03 Engineering — powder-blue plate, drawing on the right, copy in the clear left 58%. */
