@@ -46,7 +46,7 @@ body::before {
   color: var(--navy);
 }
 
-img, svg { display: block; max-width: 100%; }
+img, svg, picture { display: block; max-width: 100%; }
 
 a { color: inherit; }
 
@@ -87,7 +87,6 @@ h1 em {
   margin-top: 0.06em;
   font-style: italic;
   font-weight: 500;
-  color: var(--navy-soft);
 }
 
 h2 {
@@ -172,21 +171,26 @@ nav a[aria-current="page"] span {
   color: var(--oxide);
 }
 
-.hero {
-  display: grid;
-  grid-template-columns: 1.12fr 0.88fr;
-  min-height: calc(100svh - var(--header));
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
-}
+/* Illustrated plates: artwork fills the section, copy sits in the clear zone. */
 
-.hero-paper,
-.hero-navy {
+.plate-section {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
-  min-height: 640px;
 }
 
-.hero-paper { background: var(--paper); }
+.plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 .datum {
   position: absolute;
@@ -197,6 +201,8 @@ nav a[aria-current="page"] span {
   background: color-mix(in srgb, var(--ink) 55%, transparent);
 }
 
+.datum-light { background: color-mix(in srgb, var(--pale) 40%, transparent); }
+
 .diamond {
   position: absolute;
   top: 28px;
@@ -206,6 +212,8 @@ nav a[aria-current="page"] span {
   background: var(--navy);
   transform: rotate(45deg);
 }
+
+.datum-light .diamond { background: var(--pale); }
 
 .datum-label {
   position: absolute;
@@ -219,32 +227,30 @@ nav a[aria-current="page"] span {
   color: var(--navy);
 }
 
-.watermark {
-  position: absolute;
-  right: -4%;
-  top: 4%;
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(120px, 18vw, 240px);
-  font-style: italic;
-  line-height: 0.8;
-  color: var(--ink);
-  opacity: 0.13;
-  pointer-events: none;
-  user-select: none;
+.datum-light .datum-label { color: var(--pale); }
+
+/* 01 Hero — deep navy plate, pipes lower left, Xs on the right. */
+
+.hero {
+  min-height: calc(100svh - var(--header));
+  background: var(--navy);
+  color: var(--paper);
 }
+
+.hero .plate img { object-position: left bottom; }
 
 .hero-copy {
   position: relative;
-  z-index: 2;
-  max-width: 640px;
-  padding: 112px 56px 240px 96px;
+  max-width: min(44%, 640px);
+  padding: 112px 0 240px 96px;
 }
+
+.hero h1 em { color: var(--pale); }
 
 .deck {
   max-width: 38em;
   margin: 28px 0 0;
-  color: var(--graphite);
+  color: var(--draft);
   font-size: 16px;
   line-height: 1.6;
 }
@@ -263,7 +269,7 @@ nav a[aria-current="page"] span {
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--graphite);
+  color: var(--pale);
 }
 
 .facts li + li::before {
@@ -276,128 +282,24 @@ nav a[aria-current="page"] span {
   vertical-align: middle;
 }
 
-.drawing-elbow { aspect-ratio: 760 / 820; height: auto; }
-.drawing-mouth { aspect-ratio: 800 / 860; height: auto; }
-.drawing-section { aspect-ratio: 480 / 520; height: auto; }
-.drawing-plan { aspect-ratio: 1200 / 80; height: 64px; }
+/* Heritage — ivory plate, crest on the right, elbow bottom left. Copy in the clear left half. */
 
-.hero-elbow {
-  position: absolute;
-  left: -4%;
-  bottom: -22%;
-  width: min(680px, 86%);
-  color: #6f8eac;
-}
-
-.hero-navy {
-  background: var(--navy);
-  color: var(--pale);
-}
-
-.navy-note {
-  position: absolute;
-  z-index: 1;
-  top: 18%;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
-.short-rule {
-  display: block;
-  width: 28px;
-  height: 1px;
-  margin: 12px auto 0;
-  background: var(--pale);
-  opacity: 0.7;
-}
-
-.drawing-mouth {
-  position: absolute;
-  width: min(760px, 118%);
-  left: 0;
-  bottom: -6%;
-  color: #d5e4f0;
-}
-
-.regs {
-  position: absolute;
-  top: 18%;
-  right: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.regs li {
-  width: 18px;
-  height: 18px;
-  border: 1px solid color-mix(in srgb, var(--pale) 55%, transparent);
-  border-radius: 50%;
-  position: relative;
-}
-
-.regs li::before,
-.regs li::after {
-  content: "";
-  position: absolute;
-  background: color-mix(in srgb, var(--pale) 55%, transparent);
-}
-
-.regs li::before {
-  left: 50%;
-  top: -5px;
-  bottom: -5px;
-  width: 1px;
-  transform: translateX(-50%);
-}
-
-.regs li::after {
-  top: 50%;
-  left: -5px;
-  right: -5px;
-  height: 1px;
-  transform: translateY(-50%);
-}
-
-.navy-caption {
-  position: absolute;
-  right: 28px;
-  bottom: 28px;
-  margin: 0;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--pale);
-}
-
-.statement {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 24px;
-  padding: clamp(88px, 12vh, 150px) var(--gutter);
+.heritage {
+  min-height: 52vw;
   background: var(--paper);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
 }
 
-.statement-index {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+.heritage .plate img { object-position: right bottom; }
+
+.heritage-copy {
+  max-width: min(48%, 620px);
+  padding: clamp(72px, 9vh, 120px) 0 clamp(160px, 22vw, 320px) calc(var(--gutter) + 72px);
 }
 
-.statement-rule {
-  width: 1px;
-  flex: 1;
-  min-height: 80px;
-  background: color-mix(in srgb, var(--ink) 45%, transparent);
-}
+.heritage-copy h2 { margin-top: 18px; }
 
-.statement-copy p {
+.heritage-copy p:last-child {
   max-width: 42em;
   margin: 28px 0 0;
   color: var(--graphite);
@@ -405,12 +307,15 @@ nav a[aria-current="page"] span {
   line-height: 1.65;
 }
 
+/* 02 Companies — plain ivory with the powder-blue pipe study beside the list. */
+
 .companies {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   min-height: 100svh;
-  background: var(--wash);
+  background: var(--paper);
   color: var(--navy);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
 }
 
 .companies-copy {
@@ -470,21 +375,19 @@ nav a[aria-current="page"] span {
 
 .companies-sheet {
   position: relative;
+  margin: 0;
   overflow: hidden;
+  background: var(--wash);
   border-left: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--ink) 14%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ink) 14%, transparent) 1px, transparent 1px);
-  background-size: 72px 72px;
 }
 
-.sheet-elbow {
+.companies-sheet img {
   position: absolute;
-  width: min(1080px, 165%);
-  right: -24%;
-  top: 50%;
-  transform: translateY(-48%);
-  color: #6f8eac;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .sheet-caption {
@@ -499,28 +402,42 @@ nav a[aria-current="page"] span {
   color: var(--graphite);
 }
 
-.sheet-caption-light { color: var(--pale); }
+/* 03 Engineering — powder-blue plate, drawing on the right, copy in the clear left 58%. */
 
 .engineering {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  background: var(--navy);
-  color: var(--pale);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--wash);
+  color: var(--navy);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+}
+
+.engineering-plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.engineering-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
 }
 
 .engineering-copy {
+  max-width: 56%;
   padding: clamp(72px, 9vh, 120px) var(--gutter);
 }
 
-.engineering h2 {
-  margin: 18px 0 0;
-  color: var(--paper);
-}
+.engineering h2 { margin: 18px 0 0; }
 
 .lead {
   max-width: 38em;
   margin: 24px 0 40px;
-  color: var(--draft);
+  color: var(--graphite);
   font-size: 16px;
   line-height: 1.6;
 }
@@ -532,7 +449,7 @@ nav a[aria-current="page"] span {
 }
 
 .spec-grid article {
-  border-top: 1px solid color-mix(in srgb, var(--pale) 35%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 55%, transparent);
   padding-top: 16px;
 }
 
@@ -553,7 +470,7 @@ nav a[aria-current="page"] span {
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--draft);
+  color: var(--ink);
 }
 
 .spec-grid dl { margin: 0; }
@@ -563,7 +480,7 @@ nav a[aria-current="page"] span {
   grid-template-columns: 92px 1fr;
   gap: 12px;
   padding: 9px 0;
-  border-top: 1px solid color-mix(in srgb, var(--pale) 16%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
 }
 
 .spec-grid dt {
@@ -571,30 +488,16 @@ nav a[aria-current="page"] span {
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--draft);
+  color: var(--graphite);
 }
 
 .spec-grid dd {
   margin: 0;
   font-size: 14px;
-  color: var(--paper);
+  color: var(--navy);
 }
 
-.engineering-sheet {
-  position: relative;
-  overflow: hidden;
-  border-left: 1px solid color-mix(in srgb, var(--pale) 16%, transparent);
-  min-height: 520px;
-}
-
-.drawing-section {
-  position: absolute;
-  width: min(460px, 88%);
-  left: 8%;
-  top: 50%;
-  transform: translateY(-52%);
-  color: #d5e4f0;
-}
+/* 04 Story — plain ivory, no artwork. */
 
 .story {
   padding: clamp(80px, 10vh, 130px) var(--gutter) clamp(72px, 8vh, 110px);
@@ -651,9 +554,11 @@ nav a[aria-current="page"] span {
   line-height: 1.5;
 }
 
+/* 05 Projects — ivory, with the powder-blue pipe band between heading and list. */
+
 .projects {
   padding: 28px var(--gutter) clamp(80px, 10vh, 120px);
-  background: var(--wash);
+  background: var(--paper);
   border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
 }
 
@@ -675,10 +580,14 @@ nav a[aria-current="page"] span {
   align-self: end;
 }
 
-.drawing-plan {
+.projects-band {
+  margin: 44px 0 20px;
+  border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+}
+
+.projects-band img {
   width: 100%;
-  margin: 36px 0 12px;
-  color: #6f8eac;
+  height: auto;
 }
 
 .duties {
@@ -709,28 +618,33 @@ nav a[aria-current="page"] span {
 
 .duties li:hover span { color: var(--oxide); }
 
+/* 06 Contact — second navy plate, pipe frieze lower right. Copy stays in the upper 68%. */
+
 .contact {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
   gap: 48px;
-  padding: clamp(80px, 10vh, 130px) var(--gutter);
-  background: var(--paper);
-  border-top: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  min-height: 44vw;
+  padding: clamp(80px, 10vh, 130px) var(--gutter) clamp(200px, 20vw, 320px);
+  background: var(--navy);
+  color: var(--paper);
 }
+
+.contact .plate img { object-position: right bottom; }
 
 .contact h2 { margin-top: 18px; }
 
 .contact-copy p:last-child {
   max-width: 28em;
   margin: 22px 0 0;
-  color: var(--graphite);
+  color: var(--draft);
 }
 
 .titleblock {
   display: grid;
   grid-template-columns: 1.3fr 0.8fr 0.8fr;
-  align-self: end;
-  border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  align-self: start;
+  border: 1px solid color-mix(in srgb, var(--pale) 40%, transparent);
 }
 
 .titleblock div {
@@ -739,8 +653,8 @@ nav a[aria-current="page"] span {
   gap: 6px;
   min-height: 78px;
   padding: 14px 16px 16px;
-  border-right: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--pale) 22%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--pale) 22%, transparent);
 }
 
 .titleblock div:nth-child(3n) { border-right: 0; }
@@ -756,7 +670,7 @@ nav a[aria-current="page"] span {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--draft);
 }
 
 .titleblock strong,
@@ -765,11 +679,11 @@ nav a[aria-current="page"] span {
   font-size: 15px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: var(--paper);
 }
 
 .titleblock a {
   width: fit-content;
-  color: var(--navy);
   text-decoration: none;
   border-bottom: 1px solid var(--oxide);
   padding-bottom: 2px;
@@ -778,38 +692,34 @@ nav a[aria-current="page"] span {
 @media (max-width: 1100px) {
   .spec-grid,
   .projects-head,
-  .contact,
-  .statement {
+  .contact {
     grid-template-columns: 1fr;
   }
 
-  .statement-rule { display: none; }
+  .hero-copy { max-width: min(60%, 560px); }
+
+  .heritage-copy { max-width: 60%; }
 }
 
 @media (max-width: 900px) {
-  .watermark { display: none; }
-
-  .hero,
-  .companies,
-  .engineering {
+  .companies {
     grid-template-columns: 1fr;
   }
 
-  .hero-copy { padding: 56px 24px 180px 72px; }
-
-  .hero-navy { min-height: 560px; }
-
   .companies-sheet {
-    min-height: 460px;
+    aspect-ratio: 1 / 1;
     border-left: 0;
     border-top: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
   }
 
-  .engineering-sheet {
-    min-height: 460px;
-    border-left: 0;
-    border-top: 1px solid color-mix(in srgb, var(--pale) 16%, transparent);
+  /* On small screens the engineering drawing becomes a standalone plate under the specs. */
+  .engineering-plate {
+    position: static;
+    aspect-ratio: 1170 / 1000;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
   }
+
+  .engineering-copy { max-width: none; }
 
   .timeline {
     grid-template-columns: 1fr;
@@ -837,9 +747,46 @@ nav a[aria-current="page"] span {
 
   .titleblock { grid-template-columns: 1fr 1fr; }
 
-  .titleblock div:nth-child(3n) { border-right: 1px solid color-mix(in srgb, var(--ink) 28%, transparent); }
+  .titleblock div:nth-child(3n) { border-right: 1px solid color-mix(in srgb, var(--pale) 22%, transparent); }
 
   .titleblock div:nth-child(2n) { border-right: 0; }
+}
+
+@media (max-width: 700px) {
+  /* Mobile plates are separate compositions: clear top, artwork at the bottom. */
+  .hero {
+    min-height: 180vw;
+  }
+
+  .hero .plate img { object-position: center bottom; }
+
+  .hero-copy {
+    max-width: none;
+    padding: 128px 72px 0 64px;
+  }
+
+  /* Heritage and contact artwork sits at natural scale against the bottom edge,
+     so the crest and the pipe frieze are never cropped away. */
+  .heritage .plate,
+  .contact .plate {
+    inset: auto 0 0 0;
+  }
+
+  .heritage .plate { height: 144vw; }
+
+  .heritage .plate img { object-position: center bottom; }
+
+  .heritage-copy {
+    max-width: 84%;
+    padding: 56px 0 58vw 24px;
+  }
+
+  .contact {
+    min-height: 0;
+    padding-bottom: 44vw;
+  }
+
+  .contact .plate { height: 120vw; }
 }
 
 @media (max-width: 640px) {
@@ -853,18 +800,13 @@ nav a[aria-current="page"] span {
 
   nav { justify-content: flex-start; }
 
-  .hero-copy { padding: 112px 22px 210px 28px; }
-
-  .hero-elbow {
-    width: 64%;
-    bottom: -34%;
-  }
-
   .datum {
     left: 20px;
     height: 96px;
     bottom: auto;
   }
+
+  .hero-copy { padding-left: 28px; }
 
   .roster li { grid-template-columns: 32px 1fr; }
 
