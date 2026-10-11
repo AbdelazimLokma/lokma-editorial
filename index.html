@@ -150,10 +150,7 @@
                 <strong>CCP pipe</strong>
                 <span class="product-visit">View products</span>
               </span>
-              <span class="product-brand">
-                <img class="product-logo product-logo-mark" src="assets/ameron-logo.png" alt="" width="48" height="34" loading="lazy" decoding="async">
-                <span>Ameron Egypt</span>
-              </span>
+              <img class="product-logo product-logo-lockup" src="assets/ameron-logo.png" alt="Ameron Egypt" width="79" height="72" loading="lazy" decoding="async">
             </a>
           </li>
           <li>
@@ -280,16 +277,16 @@
         <div class="map">
           <script type="application/json" id="project-countries">
             [
-              { "code": "eg", "projects": [] },
-              { "code": "ly", "projects": [] },
-              { "code": "sd", "projects": [] },
-              { "code": "iq", "projects": [] },
-              { "code": "qa", "projects": [] },
-              { "code": "cy", "projects": [] },
-              { "code": "es", "projects": [] }
+              { "code": "eg", "name": "Egypt", "projects": [] },
+              { "code": "ly", "name": "Libya", "projects": [] },
+              { "code": "sd", "name": "Sudan", "projects": [] },
+              { "code": "iq", "name": "Iraq", "projects": [] },
+              { "code": "qa", "name": "Qatar", "projects": [] },
+              { "code": "cy", "name": "Cyprus", "projects": [] },
+              { "code": "es", "name": "Spain", "projects": [] }
             ]
           </script>
-          <div class="map-stage"></div>
+          <div class="map-stage" data-map="assets/world-map.svg" data-country-label="project country"></div>
           <div class="map-caption">
             <p class="map-caption-text" aria-live="polite"></p>
             <a class="map-credit" href="https://mapsvg.com/maps/world">MapSVG</a>
@@ -366,7 +363,7 @@
       </ul>
     </section>
 
-    <!-- 9. Final invitation, contact, newsletter -->
+    <!-- 9. Final invitation and contact -->
     <section class="contact plate-section" id="contact">
       <picture class="plate" aria-hidden="true">
         <source media="(max-width: 700px)" srcset="assets/home-contact-navy-mobile.webp">
@@ -385,13 +382,6 @@
           <p><a href="tel:+20">+20 — — —</a><br><a href="mailto:info@lokma.com.eg">info@lokma.com.eg</a></p>
           <p><a href="https://lokma.com.eg/">lokma.com.eg</a></p>
         </address>
-        <form class="newsletter" action="#" method="post">
-          <label class="kicker kicker-light" for="newsletter-email">Newsletter</label>
-          <div class="field">
-            <input id="newsletter-email" type="email" name="email" placeholder="Email address" autocomplete="email" required>
-            <button type="submit">Sign up</button>
-          </div>
-        </form>
       </div>
       <p class="colophon">© Lokma Group. Est. 1955.</p>
     </section>
@@ -525,15 +515,16 @@
       const byCode = new Map(records.map((record) => [String(record.code).toLowerCase(), record]));
 
       const describe = (code, name) => {
+        const localName = byCode.get(code)?.name || name;
         const projects = byCode.get(code)?.projects;
         const detail = (Array.isArray(projects) ? projects : [])
           .map((project) => [project.name, project.pipe, project.length].filter(Boolean).join(", "))
           .filter(Boolean)
           .join(" · ");
-        return detail ? `${name} — ${detail}` : name;
+        return detail ? `${localName} — ${detail}` : localName;
       };
 
-      fetch("assets/world-map.svg")
+      fetch(stage.dataset.map || "assets/world-map.svg")
         .then((response) => {
           if (!response.ok) throw new Error(`Map failed to load (${response.status})`);
           return response.text();
@@ -590,7 +581,8 @@
 
           const show = (code) => {
             const path = code ? svg.getElementById(code) : null;
-            caption.textContent = path ? describe(code, path.dataset.name || code) : "";
+            const name = path ? (byCode.get(code)?.name || path.dataset.name || code) : "";
+            caption.textContent = path ? describe(code, name) : "";
           };
 
           const select = (code) => {
@@ -664,7 +656,7 @@
               path.setAttribute("role", "button");
               path.tabIndex = 0;
               path.setAttribute("aria-pressed", "false");
-              path.setAttribute("aria-label", `${name}, project country`);
+              path.setAttribute("aria-label", `${byCode.get(code)?.name || name}, ${stage.dataset.countryLabel || "project country"}`);
               const box = path.getBBox();
               const cx = box.x + box.width / 2;
               const cy = box.y + box.height / 2;

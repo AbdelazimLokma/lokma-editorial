@@ -112,7 +112,8 @@
         reveal = eased;
       }
       line.style.opacity = (reveal * fadeOut).toFixed(3);
-      line.style.transform = i === 0 ? "none" : `translateX(${((1 - reveal) * -18).toFixed(2)}px)`;
+      const slide = document.documentElement.dir === "rtl" ? 18 : -18;
+      line.style.transform = i === 0 ? "none" : `translateX(${((1 - reveal) * slide).toFixed(2)}px)`;
     }
   };
 
